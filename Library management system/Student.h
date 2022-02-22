@@ -8,5 +8,4 @@ private:
 public:
 	void Borrow();
 	void Return();
-	~Student();
 };
