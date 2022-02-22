@@ -8,8 +8,7 @@ bool Login(string file)
 	string right_password = "";
 	string username;
 	string password;
-	cout << "Enter username: "; getline(cin, username);
-	cin.ignore(256, '\n');
+	cout << "Enter username: "; getline(cin >> ws, username);
 	cout << "Enter password: "; cin >> password; cout << "\n";
 	ifstream logging(file + ".txt");
 	if (logging.is_open())
@@ -40,7 +39,6 @@ int main()
 	cout << "3) Exit\n";
 	cout << "Your choice: ";
 	cin >> choice;
-	cin.ignore(256,!'\n');
 	switch (choice)
 	{
 	case 1:
@@ -64,15 +62,13 @@ int main()
 			cout << "5) Exit\n";
 			cout << "Your choice: ";
 			cin >> choice;
-			cin.ignore(256, '\n');
 			system("cls");
 			switch (choice)
 			{
 			case 1:
-				cout << "Name of the book: "; getline(cin, name);
-				cin.ignore(256, '\n');
-				cout << "Author of the book : "; getline(cin, author);
-				cout << "Write text (write ~ to save): ";
+				cout << "Name of the book: "; getline(cin >> ws, name);
+				cout << "Author of the book : "; getline(cin >> ws, author);
+				cout << "Write text: ";
 				if (teacher->Add(name, author))
 				{
 					cout << "\nBook added\n";
@@ -93,11 +89,12 @@ int main()
 				switch (choice)
 				{
 				case 1:
-					cout << "Name: "; getline(cin, name);
+					cout << "Name: "; getline(cin >> ws, name);
+					cout << name;
 					index = teacher->FindByName(name);
 					break;
 				case 2:
-					cout << "Author: "; getline(cin, author);
+					cout << "Author: "; getline(cin >> ws, author);
 					index = teacher->FindByAuthor(author);
 					break;
 				case 3:
@@ -117,7 +114,7 @@ int main()
 					switch (choice)
 					{
 					case 1:
-						cout << "Enter new name of the book: "; getline(cin, name);
+						cout << "Enter new name of the book: "; getline(cin >> ws, name);
 						if (teacher->ModifyName(index, name))
 						{
 							cout << "Name successfully changed\n";
@@ -128,7 +125,7 @@ int main()
 						}
 						break;
 					case 2:
-						cout << "Enter new author of the book: "; getline(cin, author);
+						cout << "Enter new author of the book: "; getline(cin >> ws, author);
 						if (teacher->ModifyAuthor(index, author))
 						{
 							cout << "Author successfully changed\n";
@@ -139,13 +136,35 @@ int main()
 						}
 						break;
 					case 3:
-						if (teacher->ModifyText(index))
+						cout << "How do you want to modify text:\n";
+						cout << "1) Completely rewrite\n";
+						cout << "2) Append\n";
+						cout << "Your choice: "; cin >> choice;
+						system("cls");
+						switch (choice)
 						{
-							cout << "Text successfully changed\n";
-						}
-						else
-						{
-							cout << "Error\n";
+						case 1:
+							cout << "Write text: ";
+							if (teacher->ReWriteText(index))
+							{
+								cout << "\nText successfully rewritten\n";
+							}
+							else
+							{
+								cout << "\nError\n";
+							}
+							break;
+						case 2:
+							cout << "Write appended text: ";
+							if (teacher->AppendText(index))
+							{
+								cout << "\nText successfully appended\n";
+							}
+							else
+							{
+								cout << "\nError\n";
+							}
+							break;
 						}
 						break;
 					}

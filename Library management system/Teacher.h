@@ -5,15 +5,13 @@
 class Teacher : public School
 {
 private:
-	vector<char> Add_text_vec;
-	char Add_text;
-	string name;
-	string author;
 public:
-	bool ModifyText(int index);
-	bool ModifyName(int index, string name);
-	bool ModifyAuthor(int index, string author);
-	bool Add(string name, string author);
+	bool WriteText(const string& name, const bool& mode) const;
+	bool ReWriteText(const int& index) const;
+	bool AppendText(const int& index) const;
+	bool ModifyName(const int& index, const string& name);
+	bool ModifyAuthor(const int& index, const string& author);
+	bool Add(const string& name, const string& author);
 	void Update();
 	void Delete();
 };

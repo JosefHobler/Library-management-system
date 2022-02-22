@@ -1,10 +1,5 @@
 #pragma once
-#include <fstream>
-#include <iostream>
-#include <Windows.h>
-#include <vector>
-#include <string>
-using namespace std;
+#include "Custom functions.h"
 
 
 class School
@@ -17,15 +12,16 @@ private:
 public:
 	School();
 	bool GetFound() const;
-	int FindByAuthor(string author);
-	int FindByName(string name);
-	int FindByID(int ID);
-	void List();
-	bool Save();
-	void ModifyNameVector(string value);
-	void ModifyAuthorVector(string value);
-	void ModifyBookIDVector(int value);
-	void ModifyNameVector(int index, string value);
-	void ModifyAuthorVector(int index, string value);
+	int FindByAuthor(const string& author);
+	int FindByName(const string& name);
+	int FindByID(const int& ID);
+	void List() const;
+	bool Save() const ;
+	string GetNameVector(const int& index) const;
+	void ModifyNameVector(const string& value);
+	void ModifyAuthorVector(const string& value);
+	void ModifyBookIDVector(const int& value);
+	void ModifyNameVector(const int& index, const string& value);
+	void ModifyAuthorVector(const int& index, const string& value);
 	int GetNumberOfBooks() const;
 };

@@ -20,31 +20,31 @@ School::School()
 	}
 }
 
-void School::List()
+void School::List() const
 {
 	cout << "List\n\n";
 	for (int i = 0; i < name_of_book.size(); i++)
 	{
-		cout << " " << book_id[i] << " | " << name_of_book[i] << " | " << author_of_book[i] << "\n";
+		cout << CenteredText(to_string(book_id[i]), 3) << "|" << CenteredText(name_of_book[i], 30) << "|" << CenteredText(author_of_book[i], 30) << "|" << "\n";
 	}
 }
 
-int School::FindByAuthor(string author)
+int School::FindByAuthor(const string& author)
 {
 	found = find(author_of_book.begin(), author_of_book.end(), author) != author_of_book.end() ? true : false;
-	return author_of_book.begin() - find(author_of_book.begin(), author_of_book.end(), author);
+	return find(author_of_book.begin(), author_of_book.end(), author) - author_of_book.begin();
 }
 
-int School::FindByName(string name)
+int School::FindByName(const string& name)
 {
 	found = find(name_of_book.begin(), name_of_book.end(), name) != name_of_book.end() ? true : false;
-	return name_of_book.begin() - find(name_of_book.begin(), name_of_book.end(), name);
+	return find(name_of_book.begin(), name_of_book.end(), name) - name_of_book.begin();
 }
 
-int School::FindByID(int id)
+int School::FindByID(const int& id)
 {
 	found = find(book_id.begin(), book_id.end(), id) != book_id.end() ? true : false;
-	return book_id.begin() - find(book_id.begin(), book_id.end(), id);
+	return find(book_id.begin(), book_id.end(), id) - book_id.begin();
 }
 
 bool School::GetFound() const
@@ -52,11 +52,9 @@ bool School::GetFound() const
 	return found;
 }
 
-bool School::Save()
+bool School::Save() const
 {
 	ofstream NewBooks("Books.txt");
-	cout << name_of_book.size();
-	Sleep(500);
 	if (NewBooks.is_open())
 	{
 		for (int i = 0; i < name_of_book.size(); i++)
@@ -76,27 +74,33 @@ bool School::Save()
 	return true;
 }
 
-void School::ModifyAuthorVector(string value)
+string School::GetNameVector(const int& index) const
+{
+	return name_of_book[index];
+}
+
+
+void School::ModifyAuthorVector(const string& value)
 {
 	author_of_book.push_back(value);
 }
 
-void School::ModifyAuthorVector(int index, string value)
+void School::ModifyAuthorVector(const int& index, const string& value)
 {
 	author_of_book[index] = value;
 }
 
-void School::ModifyNameVector(string value)
+void School::ModifyNameVector(const string& value)
 {
 	name_of_book.push_back(value);
 }
 
-void School::ModifyNameVector(int index, string value)
+void School::ModifyNameVector(const int& index,const string& value)
 {
 	name_of_book[index] = value;
 }
 
-void School::ModifyBookIDVector(int value)
+void School::ModifyBookIDVector(const int& value)
 {
 	book_id.push_back(value);
 }

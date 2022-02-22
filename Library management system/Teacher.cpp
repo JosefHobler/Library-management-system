@@ -1,44 +1,66 @@
 #include "Teacher.h"
 
 
-bool Teacher::Add(string name, string author)
+bool Teacher::Add(const string& name, const string& author)
 {
-	this->name = name;
-	this->author = author;
-	while (true) 
-	{
-		cin >> Add_text;
-		if (Add_text == '~')
-		{
-			break;
-		}
-		Add_text_vec.push_back(Add_text);
-	}
 	ModifyNameVector(name);
 	ModifyAuthorVector(author);
 	ModifyBookIDVector(GetNumberOfBooks());
-	ofstream Adding(name + ".txt");
+	if (WriteText(name, true))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Teacher::ReWriteText(const int& index) const
+{
+	if (WriteText(GetNameVector(index), true))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Teacher::AppendText(const int& index) const
+{
+	if (WriteText(GetNameVector(index), false))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Teacher::WriteText(const string& name, const bool& mode) const
+{
+	string text;
+	getline(cin >> ws, text);
+	fstream Adding;
+	Adding.open(name + ".txt", mode ? ios::out : ios::app);
 	{
 		if (Adding.is_open())
 		{
-			for (int i = 0; i < Add_text_vec.size(); i++)
-			{
-				Adding << Add_text_vec[i];
-			}
+			Adding << text;
 			Adding.close();
-			Add_text_vec.clear();
 		}
 		else
 		{
 			return false;
 		}
 	}
-	Save();
-	return true;
+	if (Save())
+	{
+		return true;
+	}
+	return false;
 }
 
-bool Teacher::ModifyName(int index, string value)
+bool Teacher::ModifyName(const int& index, const string& value)
 {
+	string old_name = (GetNameVector(index)) + ".txt";
+	string new_name = value + ".txt";
+	rename(&old_name[0], &new_name[0]);
+	remove(&old_name[0]);
 	ModifyNameVector(index, value);
 	if (!Save())
 	{
@@ -47,18 +69,13 @@ bool Teacher::ModifyName(int index, string value)
 	return true;
 }
 
-bool Teacher::ModifyAuthor(int index, string value)
+bool Teacher::ModifyAuthor(const int& index, const string& value)
 {
 	ModifyAuthorVector(index, value);
 	if (!Save())
 	{
 		return false;
 	}
-	return true;
-}
-
-bool Teacher::ModifyText(int index)
-{
 	return true;
 }
 
