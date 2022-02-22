@@ -1,14 +1,10 @@
 #include "Teacher.h"
 
 
-void Teacher::Add()
+bool Teacher::Add(string name, string author)
 {
-	cout << "Name of the book: "; cin >> Add_name; cout << "\n";
-	cout << "Author of the book : "; cin >> Add_author; cout << "\n";
-	ModifyNameVector(Add_name);
-	ModifyAuthorVector(Add_author);
-	ModifyBookIDVector(GetNumberOfBooks());
-	cout << "Write text (write ~ to save): ";
+	this->name = name;
+	this->author = author;
 	while (true) 
 	{
 		cin >> Add_text;
@@ -18,17 +14,52 @@ void Teacher::Add()
 		}
 		Add_text_vec.push_back(Add_text);
 	}
-	ofstream Adding(Add_name + ".txt");
+	ModifyNameVector(name);
+	ModifyAuthorVector(author);
+	ModifyBookIDVector(GetNumberOfBooks());
+	ofstream Adding(name + ".txt");
 	{
-		for (int i = 0; i < Add_text_vec.size(); i++)
+		if (Adding.is_open())
 		{
-			Adding << Add_text_vec[i];
+			for (int i = 0; i < Add_text_vec.size(); i++)
+			{
+				Adding << Add_text_vec[i];
+			}
+			Adding.close();
+			Add_text_vec.clear();
 		}
-		Adding.close();
-		Add_text_vec.clear();
+		else
+		{
+			return false;
+		}
 	}
 	Save();
-	cout << "Book added\n";
+	return true;
+}
+
+bool Teacher::ModifyName(int index, string value)
+{
+	ModifyNameVector(index, value);
+	if (!Save())
+	{
+		return false;
+	}
+	return true;
+}
+
+bool Teacher::ModifyAuthor(int index, string value)
+{
+	ModifyAuthorVector(index, value);
+	if (!Save())
+	{
+		return false;
+	}
+	return true;
+}
+
+bool Teacher::ModifyText(int index)
+{
+	return true;
 }
 
 void Teacher::Update()

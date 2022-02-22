@@ -8,10 +8,12 @@ private:
 	vector<char> Add_text_vec;
 	char Add_text;
 	string name;
-	string Add_author;
-	int Add_id;
+	string author;
 public:
-	void Add();
+	bool ModifyText(int index);
+	bool ModifyName(int index, string name);
+	bool ModifyAuthor(int index, string author);
+	bool Add(string name, string author);
 	void Update();
 	void Delete();
 };
