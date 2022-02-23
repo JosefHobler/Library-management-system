@@ -12,6 +12,5 @@ public:
 	bool ModifyName(const int& index, const string& name);
 	bool ModifyAuthor(const int& index, const string& author);
 	bool Add(const string& name, const string& author);
-	void Update();
-	void Delete();
+	bool Delete(int index, string file_name);
 };

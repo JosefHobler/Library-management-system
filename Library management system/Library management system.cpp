@@ -1,14 +1,13 @@
-﻿
-#include "Student.h"
+﻿#include "Student.h"
 #include "Teacher.h"
+#include "Custom functions.h"
 
-bool Login(string file)
+bool Login(const string& file, string& username)
 {
-	string right_username = "";
-	string right_password = "";
-	string username;
 	string password;
-	cout << "Enter username: "; getline(cin >> ws, username);
+	string right_password = "";
+	string right_username = "";
+	cout << "Enter username: "; cin >> username;
 	cout << "Enter password: "; cin >> password; cout << "\n";
 	ifstream logging(file + ".txt");
 	if (logging.is_open())
@@ -19,16 +18,44 @@ bool Login(string file)
 		logging >> right_password;
 		logging.close();
 	}
-	return (right_password == password && right_username == username) ? true : false;
+	return right_password == password && right_username == username;
 }
 
-int main()
+int Search(int choice, School* teacher)
 {
 	string name;
 	string author;
 	int id;
-	Student* student = new Student;
-	Teacher* teacher = new Teacher;
+	cout << "Search book by:\n";
+	cout << "1) Name\n";
+	cout << "2) Author\n";
+	cout << "3) ID\n";
+	cout << "Your choice: "; cin >> choice;
+	system("cls");
+	switch (choice)
+	{
+	case 1:
+		cout << "Name: "; getline(cin >> ws, name);
+		cout << name;
+		return teacher->FindByName(name);
+	case 2:
+		cout << "Author: "; getline(cin >> ws, author);
+		return teacher->FindByAuthor(author);
+	case 3:
+		cout << "ID: "; cin >> id;
+		return teacher->FindByID(id);
+	}
+}
+
+int main()
+{
+	string username;
+	bool log;
+	string name;
+	string author;
+	int id;
+	unique_ptr<Student> student;
+	unique_ptr<Teacher> teacher = make_unique<Teacher>();
 	string file;
 	int choice;
 	int index;
@@ -44,7 +71,7 @@ int main()
 	case 1:
 		system("cls");
 		file = "TeacherLogin";
-		if (!Login(file))
+		if (!Login(file, username))
 		{
 			cout << "Logging failed\n";
 			Sleep(1000);
@@ -59,7 +86,8 @@ int main()
 			cout << "2) Update any book\n";
 			cout << "3) Delete a book\n";
 			cout << "4) List of books\n";
-			cout << "5) Exit\n";
+			cout << "5) Show book\n";
+			cout << "6) Exit\n";
 			cout << "Your choice: ";
 			cin >> choice;
 			system("cls");
@@ -80,28 +108,7 @@ int main()
 				Sleep(500);
 				break;
 			case 2:
-				cout << "Seach book by:\n";
-				cout << "1) Name\n";
-				cout << "2) Author\n";
-				cout << "3) ID\n";
-				cout << "Your choice: "; cin >> choice;
-				system("cls");
-				switch (choice)
-				{
-				case 1:
-					cout << "Name: "; getline(cin >> ws, name);
-					cout << name;
-					index = teacher->FindByName(name);
-					break;
-				case 2:
-					cout << "Author: "; getline(cin >> ws, author);
-					index = teacher->FindByAuthor(author);
-					break;
-				case 3:
-					cout << "ID: "; cin >> id;
-					index = teacher->FindByID(id);
-					break;
-				}
+				index = Search(choice, teacher.get());
 				if (teacher->GetFound())
 				{
 					system("cls");
@@ -176,12 +183,47 @@ int main()
 				Sleep(1000);
 				break;
 			case 3:
-				teacher->Delete();
+				index = Search(choice, teacher.get());
+				if (teacher->GetFound())
+				{
+					if (teacher->Delete(index, teacher->GetNameVector(index)))
+					{
+						cout << "Successfully deleted\n";
+					}
+					else
+					{
+						cout << "Error\n";
+					}
+				}
+				else
+				{
+					cout << "Error";
+				}
+				Sleep(1000);
 				break;
 			case 4:
 				teacher->List();
 				break;
 			case 5:
+				index = Search(choice, teacher.get());
+				if (teacher->GetFound())
+				{
+					if (teacher->ReadText(teacher->GetNameVector(index)))
+					{
+						cout << "\nSuccessfully loaded\n";
+					}
+					else
+					{
+						cout << "Error\n";
+					}
+				}
+				else
+				{
+					cout << "Error";
+				}
+				Sleep(1000);
+				break;
+			case 6:
 				return 0;
 			}
 			cout << "\n\n\nPress [escape] to go to the menu\n";
@@ -191,12 +233,13 @@ int main()
 	case 2:
 		system("cls");
 		file = "StudentLogin";
-		if (!Login(file))
+		if (!Login(file, username))
 		{
 			cout << "Logging failed\n";
 			Sleep(1000);
 			return 0;
 		}
+		student = make_unique<Student>(username);
 		cout << "Login successfull\n";
 		Sleep(1000);
 		while (true)
@@ -206,21 +249,57 @@ int main()
 			cout << "1) Borrow book\n";
 			cout << "2) Return book\n";
 			cout << "3) List of books\n";
-			cout << "4) Exit\n";
+			cout << "4) Show book\n";
+			cout << "5) Exit\n";
 			cout << "Your choice: ";
 			cin >> choice;
 			switch (choice)
 			{
 			case 1:
-				student->Borrow();
+				index = Search(choice, student.get());
+				if (student->GetFound())
+				{
+					if (student->GetAvailable(index))
+					{
+						student->Borrow(index, username);
+					}
+					else
+					{
+						cout << "Error\n";
+					}
+				}
+				else
+				{
+					cout << "Error";
+				}
+				Sleep(1000);
 				break;
 			case 2:
-				student->Return();
+				student->Return(index, username);
 				break;
 			case 3:
 				student->List();
 				break;
 			case 4:
+				index = Search(choice, student.get());
+				if (student->GetFound())
+				{
+					if (student->ReadText(student->GetNameVector(index)))
+					{
+						cout << "\nSuccessfully loaded\n";
+					}
+					else
+					{
+						cout << "Error\n";
+					}
+				}
+				else
+				{
+					cout << "Error";
+				}
+				Sleep(1000);
+				break;
+			case 5:
 				return 0;
 			}
 			cout << "\n\n\nPress [escape] to go to the menu\n";

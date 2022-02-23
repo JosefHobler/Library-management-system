@@ -6,6 +6,7 @@ bool Teacher::Add(const string& name, const string& author)
 	ModifyNameVector(name);
 	ModifyAuthorVector(author);
 	ModifyBookIDVector(GetNumberOfBooks());
+	ModifyAvailableVector("Available");
 	if (WriteText(name, true))
 	{
 		return true;
@@ -79,12 +80,15 @@ bool Teacher::ModifyAuthor(const int& index, const string& value)
 	return true;
 }
 
-void Teacher::Update()
+bool Teacher::Delete(int index, string file_name)
 {
-
-}
-
-void Teacher::Delete()
-{
-
+	GetToLastElement(index);
+	EraseLastElement();
+	file_name += ".txt";
+	remove(&file_name[0]);
+	if (Save())
+	{
+		return true;
+	}
+	return false;
 }
