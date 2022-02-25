@@ -2,15 +2,13 @@
 #include "School.h"
 
 
-class Teacher : public School
+struct Teacher : public School
 {
-private:
-public:
-	bool WriteText(const string& name, const bool& mode) const;
-	bool ReWriteText(const int& index) const;
-	bool AppendText(const int& index) const;
-	bool ModifyName(const int& index, const string& name);
-	bool ModifyAuthor(const int& index, const string& author);
 	bool Add(const string& name, const string& author);
-	bool Delete(int index, string file_name);
+	
+	bool Delete(const int& index, string file_name);
+	
+	bool WriteText(const string& index, const bool& mode) const;
+	
+	bool ModifyName(const int& index, const string& name);
 };

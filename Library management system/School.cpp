@@ -23,33 +23,6 @@ School::School()
 	}
 }
 
-bool School::ReadText(const string& file_name) const
-{
-	string line;
-	ifstream read(file_name + ".txt");
-	if (read.is_open())
-	{
-		while (!read.eof())
-		{
-			getline(read, line);
-			cout << line << "\n";
-		}
-		read.close();
-		return true;
-	}
-	return false;
-}
-
-void School::List() const
-{
-	cout << "List\n\n";
-	for (int i = 0; i < name_of_book.size(); i++)
-	{
-		cout << CenteredText(to_string(book_id[i]), 3) << "|" << CenteredText(name_of_book[i], 20) << 
-			"|" << CenteredText(author_of_book[i], 20) << "|" << CenteredText(available[i], 15) << "|" << "\n";
-	}
-}
-
 int School::FindByAuthor(const string& author)
 {
 	found = find(author_of_book.begin(), author_of_book.end(), author) != author_of_book.end() ? true : false;
@@ -68,9 +41,14 @@ int School::FindByID(const int& id)
 	return find(book_id.begin(), book_id.end(), id) - book_id.begin();
 }
 
-bool School::GetFound() const
+void School::List() const
 {
-	return found;
+	cout << "List\n\n";
+	for (int i = 0; i < name_of_book.size(); i++)
+	{
+		cout << CenteredText(to_string(book_id[i]), 3) << "|" << CenteredText(name_of_book[i], 20) <<
+			"|" << CenteredText(author_of_book[i], 20) << "|" << CenteredText(available[i], 15) << "|" << "\n";
+	}
 }
 
 bool School::Save() const
@@ -95,6 +73,63 @@ bool School::Save() const
 	return true;
 }
 
+bool School::ReadText(const string& file_name) const
+{
+	string line;
+	ifstream read(file_name + ".txt");
+	if (read.is_open())
+	{
+		while (!read.eof())
+		{
+			getline(read, line);
+			cout << line << "\n";
+		}
+		read.close();
+		return true;
+	}
+	return false;
+}
+
+void School::ModifyBookIDVector(const int& value)
+{
+	book_id.push_back(value);
+}
+
+void School::ModifyAuthorVector(const string& value)
+{
+	author_of_book.push_back(value);
+}
+
+bool School::ModifyAuthorVector(const int& index, const string& value)
+{
+	author_of_book[index] = value;
+	if (Save())
+	{
+		return true;
+	}
+	return false;
+}
+
+void School::ModifyNameVector(const string& value)
+{
+	name_of_book.push_back(value);
+}
+
+void School::ModifyNameVector(const int& index, const string& value)
+{
+	name_of_book[index] = value;
+}
+
+void School::ModifyAvailableVector(const string& value)
+{
+	available.push_back(value);
+}
+
+void School::ModifyAvailableVector(const int& index, const string& value)
+{
+	available[index] = value;
+}
+
 void School::EraseLastElement()
 {
 	name_of_book.erase(name_of_book.end() - 1);
@@ -116,42 +151,6 @@ string School::GetNameVector(const int& index) const
 	return name_of_book[index];
 }
 
-
-void School::ModifyAuthorVector(const string& value)
-{
-	author_of_book.push_back(value);
-}
-
-void School::ModifyAuthorVector(const int& index, const string& value)
-{
-	author_of_book[index] = value;
-}
-
-void School::ModifyNameVector(const string& value)
-{
-	name_of_book.push_back(value);
-}
-
-void School::ModifyAvailableVector(const string& value)
-{
-	available.push_back(value);
-}
-
-void School::ModifyAvailableVector(const int& index, const string& value)
-{
-	available[index] = value;
-}
-
-void School::ModifyNameVector(const int& index,const string& value)
-{
-	name_of_book[index] = value;
-}
-
-void School::ModifyBookIDVector(const int& value)
-{
-	book_id.push_back(value);
-}
-
 int School::GetNumberOfBooks() const
 {
 	return name_of_book.size();
@@ -162,3 +161,7 @@ bool School::GetAvailable(const int& index) const
 	return available[index] == "Available";
 }
 
+bool School::GetFound() const
+{
+	return found;
+}

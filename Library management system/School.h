@@ -12,23 +12,32 @@ private:
 	vector<int> book_id;
 public:
 	School();
-	bool GetFound() const;
+	
 	int FindByAuthor(const string& author);
 	int FindByName(const string& name);
 	int FindByID(const int& ID);
+	
 	void List() const;
 	bool Save() const ;
-	string GetNameVector(const int& index) const;
-	void ModifyNameVector(const string& value);
-	void ModifyAuthorVector(const string& value);
+	
+	bool ReadText(const string& file_name) const;
+	
 	void ModifyBookIDVector(const int& value);
+	
+	void ModifyAuthorVector(const string& value);
+	bool ModifyAuthorVector(const int& index, const string& value);
+	
+	void ModifyNameVector(const string& value);
 	void ModifyNameVector(const int& index, const string& value);
+	
 	void ModifyAvailableVector(const string& value);
 	void ModifyAvailableVector(const int& index, const string& value);
-	void ModifyAuthorVector(const int& index, const string& value);
-	int GetNumberOfBooks() const;
+	
 	void EraseLastElement();
 	void GetToLastElement(int index);
-	bool ReadText(const string& file_name) const;
+	
+	string GetNameVector(const int& index) const;
+	int GetNumberOfBooks() const;
 	bool GetAvailable(const int& index) const;
+	bool GetFound() const;
 };

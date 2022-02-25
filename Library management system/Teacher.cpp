@@ -14,18 +14,13 @@ bool Teacher::Add(const string& name, const string& author)
 	return false;
 }
 
-bool Teacher::ReWriteText(const int& index) const
+bool Teacher::Delete(const int& index, string file_name)
 {
-	if (WriteText(GetNameVector(index), true))
-	{
-		return true;
-	}
-	return false;
-}
-
-bool Teacher::AppendText(const int& index) const
-{
-	if (WriteText(GetNameVector(index), false))
+	GetToLastElement(index);
+	EraseLastElement();
+	file_name += ".txt";
+	remove(&file_name[0]);
+	if (Save())
 	{
 		return true;
 	}
@@ -68,27 +63,4 @@ bool Teacher::ModifyName(const int& index, const string& value)
 		return false;
 	}
 	return true;
-}
-
-bool Teacher::ModifyAuthor(const int& index, const string& value)
-{
-	ModifyAuthorVector(index, value);
-	if (!Save())
-	{
-		return false;
-	}
-	return true;
-}
-
-bool Teacher::Delete(int index, string file_name)
-{
-	GetToLastElement(index);
-	EraseLastElement();
-	file_name += ".txt";
-	remove(&file_name[0]);
-	if (Save())
-	{
-		return true;
-	}
-	return false;
 }

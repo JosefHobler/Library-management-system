@@ -1,2 +1,2 @@
-Username: Josef
-Password: 123a
+Josef
+123a
